@@ -58,14 +58,21 @@ const managerQuestions = [
 const addMembersQuestions = [
     {
         type: 'confirm',
-        name: 'addMember',
+        name: 'confirmAddMember',
         message: 'Would you like to add another team member?',
     },
     {
         type: 'list',
         name: 'engineerOrIntern',
         message: 'Would you like to add an engineer or an intern?',
-        choices: ['Engineer', 'Intern']
+        choices: ['Engineer', 'Intern'],
+        when: ({ confirmAddMember }) => {
+            if (confirmAddMember) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 ];
 
@@ -92,13 +99,17 @@ const promptManager = () => {
 const promptAddMember = teamData => {
     return inquirer.prompt(addMembersQuestions)
         .then(addMembersData => {
-            if (addMembersData.addMember) {
+            if (addMembersData.confirmAddMember) {
                 if(addMembersData.engineerOrIntern === 'Engineer') {
                     return promptEngineer(teamData);
                 } 
                 else if (addMembersData.engineerOrIntern === 'Intern') {
                     return promptIntern(teamData);
                 }
+            }
+            else {
+                console.log(teamData);
+                return teamData;
             }
         });
 };
@@ -117,6 +128,7 @@ const promptEngineer = teamData => {
             teamData.engineers.push(engineerData);
             return teamData;
         })
+        .then(promptAddMember);
 }
 
 const promptIntern = teamData => {
@@ -133,10 +145,8 @@ const promptIntern = teamData => {
             teamData.interns.push(internData);
             return teamData;
         })
+        .then(promptAddMember);
 }
 
 promptManager()
-    .then(promptAddMember)
-    .then(teamData => {
-        console.log(teamData);
-    });
+    .then(promptAddMember);
