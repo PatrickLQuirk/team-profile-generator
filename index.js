@@ -1,5 +1,6 @@
 const inquirer = require('inquirer');
 const createEmployees = require('./utils/create-Employees');
+const { writeFile, copyFile } = require('./utils/generate-site.js');
 const generatePage = require('./src/page-template');
 
 // Plan for the menu: use separate prompts with separate question lists for the manager, engineer, and intern questions
@@ -239,6 +240,16 @@ promptManager()
     .then(promptAddMember)
     .then(createEmployees)
     .then(generatePage)
-    .then(template => {
-        console.log(template);
+    .then(pageHTML => {
+        return writeFile(pageHTML);
     })
+    .then(writeFileResponse => {
+        console.log(writeFileResponse);
+        return copyFile();
+    })
+    .then(copyFileResponse => {
+        console.log(copyFileResponse);
+    })
+    .catch(err => {
+        console.log(err);
+    });
