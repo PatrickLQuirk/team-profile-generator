@@ -1,5 +1,6 @@
 const inquirer = require('inquirer');
 const createEmployees = require('./utils/create-Employees');
+const generatePage = require('./src/page-template');
 
 // Plan for the menu: use separate prompts with separate question lists for the manager, engineer, and intern questions
 // Additionally, have the prompt for whether to add a new team member in its own function.
@@ -236,4 +237,8 @@ const promptIntern = teamData => {
 
 promptManager()
     .then(promptAddMember)
-    .then(createEmployees);
+    .then(createEmployees)
+    .then(generatePage)
+    .then(template => {
+        console.log(template);
+    })
