@@ -11,18 +11,22 @@ const createEmployees = teamData => {
     const manager = new Manager(managerData.managerName, managerId, managerData.managerEmail, managerOffice);
     employees.push(manager);
 
-    engineers.forEach(engineerData => {
-        const engineerId = JSON.parse(engineerData.engineerID);
-        const engineer = new Engineer(engineerData.engineerName, engineerId, engineerData.engineerEmail, engineerData.engineerGithub);
-        employees.push(engineer);
-    });
+    if (engineers) {
+        engineers.forEach(engineerData => {
+            const engineerId = JSON.parse(engineerData.engineerID);
+            const engineer = new Engineer(engineerData.engineerName, engineerId, engineerData.engineerEmail, engineerData.engineerGithub);
+            employees.push(engineer);
+        });
+    }
 
-    interns.forEach(internData => {
-        const internId = JSON.parse(internData.internID);
-        const intern = new Intern(internData.internName, internId, internData.internEmail, internData.internSchool);
-        employees.push(intern);
-    });
-    
+    if (interns) {
+        interns.forEach(internData => {
+            const internId = JSON.parse(internData.internID);
+            const intern = new Intern(internData.internName, internId, internData.internEmail, internData.internSchool);
+            employees.push(intern);
+        });
+    }
+
     console.log(employees);
     return employees;
 };
